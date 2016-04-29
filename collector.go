@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -58,10 +59,13 @@ var (
 	})
 )
 
+// Exporter implements the prometheus.Collector interface. It exposes the metrics
+// of a NATS node.
 type Exporter struct {
 	NatsURL string
 }
 
+// NewExporter instantiates a new NATS Exporter.
 func NewExporter(natsURL *url.URL) *Exporter {
 	natsURL.Path = "/varz"
 	return &Exporter{
@@ -69,6 +73,7 @@ func NewExporter(natsURL *url.URL) *Exporter {
 	}
 }
 
+// Describe describes all the registered stats metrics from the NATS node.
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	connections.Describe(ch)
 	routes.Describe(ch)
@@ -77,6 +82,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	slowConsumers.Describe(ch)
 }
 
+// Collect collects all the registered stats metrics from the NATS node.
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	e.collect()
 
@@ -89,7 +95,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 
 func (e *Exporter) collect() {
 	var metrics natsMetrics
-	resp, err := http.DefaultClient.Get(e.NatsURL)
+
+	httpClient := http.DefaultClient
+	httpClient.Timeout = 1 * time.Second
+	resp, err := httpClient.Get(e.NatsURL)
 	if err != nil {
 		log.Printf("could not retrieve NATS metrics: %v", err)
 		return
