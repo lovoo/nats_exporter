@@ -24,6 +24,7 @@ func main() {
 	}
 	prometheus.MustRegister(NewExporter(nURL))
 
+	log.Printf("Starting Server: %s", *listenAddress)
 	handler := prometheus.Handler()
 	if *metricsPath == "" || *metricsPath == "/" {
 		http.Handle(*metricsPath, handler)
