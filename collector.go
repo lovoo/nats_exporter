@@ -112,11 +112,11 @@ func (e *Exporter) collect() {
 	connections.Set(metrics.Connections)
 	routes.Set(metrics.Routes)
 
-	messageCounter.WithLabelValues("in").Add(metrics.MessagesIn)
-	messageCounter.WithLabelValues("out").Add(metrics.MessagesOut)
+	messageCounter.WithLabelValues("in").Set(metrics.MessagesIn)
+	messageCounter.WithLabelValues("out").Set(metrics.MessagesOut)
 
-	bytesCounter.WithLabelValues("in").Add(metrics.BytesIn)
-	bytesCounter.WithLabelValues("out").Add(metrics.BytesOut)
+	bytesCounter.WithLabelValues("in").Set(metrics.BytesIn)
+	bytesCounter.WithLabelValues("out").Set(metrics.BytesOut)
 
 	slowConsumers.Set(metrics.SlowConsumers)
 }
