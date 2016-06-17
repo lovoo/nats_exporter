@@ -84,7 +84,9 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect collects all the registered stats metrics from the NATS node.
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
-	e.collect()
+	if err := e.collect(); err != nil {
+		return
+	}
 
 	connections.Collect(ch)
 	routes.Collect(ch)
@@ -93,7 +95,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	slowConsumers.Collect(ch)
 }
 
-func (e *Exporter) collect() {
+func (e *Exporter) collect() error {
 	var metrics natsMetrics
 
 	httpClient := http.DefaultClient
@@ -101,12 +103,13 @@ func (e *Exporter) collect() {
 	resp, err := httpClient.Get(e.NatsURL)
 	if err != nil {
 		log.Printf("could not retrieve NATS metrics: %v", err)
-		return
+		return err
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&metrics)
 	if err != nil {
 		log.Printf("could not decode NATS metrics: %v", err)
+		return err
 	}
 
 	connections.Set(metrics.Connections)
@@ -119,4 +122,5 @@ func (e *Exporter) collect() {
 	bytesCounter.WithLabelValues("out").Set(metrics.BytesOut)
 
 	slowConsumers.Set(metrics.SlowConsumers)
+	return nil
 }
