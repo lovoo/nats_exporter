@@ -4,5 +4,5 @@ go:
   - 1.6
 
 script:
-  go build
-  go test ./...
+  - go build
+  - go test ./...
