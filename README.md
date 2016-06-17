@@ -1,6 +1,6 @@
 # NATS Exporter
 
-[![GoDoc](https://godoc.org/github.com/lovoo/nats_exporter?status.svg)](https://godoc.org/github.com/lovoo/nats_exporter)
+[![GoDoc](https://godoc.org/github.com/lovoo/nats_exporter?status.svg)](https://godoc.org/github.com/lovoo/nats_exporter) [![Build Status](https://travis-ci.org/lovoo/nats_exporter.svg?branch=master)](https://travis-ci.org/lovoo/nats_exporter)
 
 NATS exporter for [Prometheus](https://prometheus.io/), written in Go. It extracts several metrics and provides them via the standard HTTP interface for Prometheus to collect them.
 
