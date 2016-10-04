@@ -1,38 +1,34 @@
+GO       = go
+GOX      = gox -os="linux darwin windows freebsd netbsd openbsd"
+GOX_ARGS = "-output=build/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
 APP = nats_exporter
-
 DIR = $(shell pwd)
 
-GO = go
+NO_COLOR    = \033[0m
+OK_COLOR    = \033[32;01m
+ERROR_COLOR = \033[31;01m
+WARN_COLOR  = \033[33;01m
+MAKE_COLOR  = \033[33;01m%-20s\033[0m
 
-GOX = gox -os="linux darwin windows freebsd openbsd netbsd"
-GOX_ARGS = "-output={{.Dir}}_{{.OS}}_{{.Arch}}"
+SRCS      = $(shell git ls-files '*.go' | grep -v '^vendor/')
+BUILD_DIR = build/
 
-NO_COLOR=\033[0m
-OK_COLOR=\033[32;01m
-ERROR_COLOR=\033[31;01m
-WARN_COLOR=\033[33;01m
-
-MAKE_COLOR=\033[33;01m%-20s\033[0m
-
-MAIN = github.com/lovoo/nats_exporter
-SRCS = $(shell git ls-files '*.go' | grep -v '^vendor/')
-EXE = $(shell ls lovoo_exporter_*)
-
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := build
 
 .PHONY: help
 help:
-	@echo -e "$(OK_COLOR)==== $(APP) ====$(NO_COLOR)"
+	@echo "$(OK_COLOR)==== $(APP) ====$(NO_COLOR)"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(MAKE_COLOR) : %s\n", $$1, $$2}'
 
-clean: ## Cleanup
-	@echo -e "$(OK_COLOR)[$(APP)] Cleanup$(NO_COLOR)"
-	@rm -fr $(EXE) $(APP)-*.tar.gz
+.PHONY: clean
+clean:
+	@echo "$(OK_COLOR)[$(APP)] Cleanup$(NO_COLOR)"
+	@rm $(BUILD_DIR)/*
 
 .PHONY: init
-init: ## Install requirements
-	@echo -e "$(OK_COLOR)[$(APP)] Install requirements$(NO_COLOR)"
+init:
+	@echo "$(OK_COLOR)[$(APP)] Install requirements$(NO_COLOR)"
 	@go get -u github.com/golang/glog
 	@go get -u github.com/Masterminds/rmvcsdir
 	@go get -u github.com/golang/lint/golint
@@ -42,38 +38,34 @@ init: ## Install requirements
 	@go get -u github.com/kardianos/govendor
 
 .PHONY: deps-list
-deps-list: ## List dependencies
-	@echo -e "$(OK_COLOR)[$(APP)] List dependencies$(NO_COLOR)"
+deps-list:
+	@echo "$(OK_COLOR)[$(APP)] List dependencies$(NO_COLOR)"
 	@govendor list
 
 .PHONY: deps-update
-deps-update: ## Update dependencies
-	@echo -e "$(OK_COLOR)[$(APP)] Update dependencies$(NO_COLOR)"
+deps-update:
+	@echo "$(OK_COLOR)[$(APP)] Update dependencies$(NO_COLOR)"
 	@govendor update
 
 .PHONY: build
-build: ## Make binary
-	@echo -e "$(OK_COLOR)[$(APP)] Build $(NO_COLOR)"
-	@$(GO) build .
+build:
+	@echo "$(OK_COLOR)[$(APP)] Build $(NO_COLOR)"
+	@$(GO) build -o $(BUILD_DIR)/nats_exporter .
 
 .PHONY: test
-test: ## Launch unit tests
-	@echo -e "$(OK_COLOR)[$(APP)] Launch unit tests $(NO_COLOR)"
+test:
+	@echo "$(OK_COLOR)[$(APP)] Launch unit tests $(NO_COLOR)"
 	@govendor test +local
 
 .PHONY: lint
-lint: ## Launch golint
+lint:
 	@$(foreach file,$(SRCS),golint $(file) || exit;)
 
 .PHONY: vet
-vet: ## Launch go vet
+vet:
 	@$(foreach file,$(SRCS),$(GO) vet $(file) || exit;)
 
-gox: ## Make all binaries
-	@echo -e "$(OK_COLOR)[$(APP)] Create binaries $(NO_COLOR)"
-	$(GOX) $(GOX_ARGS) github.com/lovoo/nats_exporter
-
-# for goprojectile
-.PHONY: gopath
-gopath:
-	@echo `pwd`:`pwd`/vendor
+.PHONY: release-build
+release-build:
+	@echo "$(OK_COLOR)[$(APP)] Create binaries $(NO_COLOR)"
+	@$(GOX) $(GOX_ARGS) github.com/lovoo/nats_exporter
