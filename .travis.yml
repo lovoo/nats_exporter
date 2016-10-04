@@ -3,6 +3,8 @@ language: go
 go:
   - 1.6
 
+before_install:
+  - go get -u github.com/kardianos/govendor
 script:
-  - go build
-  - go test ./...
+  - make build
+  - make test
