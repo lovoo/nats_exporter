@@ -22,6 +22,7 @@ deploy:
     - build/nats_exporter_linux_386
     - build/nats_exporter_linux_amd64
     - build/nats_exporter_linux_arm
+    - build/nats_exporter_linux_arm64
     - build/nats_exporter_windows_386.exe
     - build/nats_exporter_windows_amd64.exe
   on:
