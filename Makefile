@@ -1,6 +1,6 @@
 GO       = go
-GOX      = gox -os="linux darwin windows freebsd netbsd openbsd"
-GOX_ARGS = "-output=build/{{.Dir}}_{{.OS}}_{{.Arch}}"
+GOX      = gox
+GOX_ARGS = "-osarch=linux/amd64 linux/386 linux/arm linux/arm64 darwin/amd64 freebsd/amd64 freebsd/386 windows/386 windows/amd64 -output=build/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
 APP = nats_exporter
 DIR = $(shell pwd)
