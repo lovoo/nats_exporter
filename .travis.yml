@@ -16,20 +16,13 @@ deploy:
   api_key:
     secure: 1XMCwnd9P3QAiQhL4yiBYmEUS7T/1EAaZE78DHfXKeroW/2SHP9TaXkt7Nm1S4f3yU/1kuBKRdjnncSoLmNrGW+0K9VBx5ACpwoPcAhJCu5jYRkrXBdDwlnTepVcf6ODLB9X+O8WNQlaAOUlcybqf4Qin0nu1K5NVcdUV+8iHNFodJWtLNrd1SyoL4XlvMTTWm40a0EEUTKgtzw69rjUVrVdhq5Ae8zuRLQrFyVTnTIMiRaHwOJbJxPT61qHWLsKRJ7y0XxdREjtN87hcUTQ9WqQmw+xvN6SHAiAwwfB7HtILyzkw99/0aZoWc8wilLxkDZ6okp4c8OMLuWVjJlhEsvbQn7LMa5CpNdJMPBJPaNbqjPT+2QJFMDN2rw2sOp7Wlv23MO0Akq7QTb3dRGfVzZXWtt1LjapXe7Iw21m7+OXtkQ4voe9RqxRNzE8F9jhrCCsmLdLWuYoU5lbTRGLzFt0XvERGSKbdak/S7Y1BSyWUTxD4DPNaPW5kBPFj1CjjVuaD1cj5MTanvNgszERQBwDbkwd5cj0FWTq5/9qwYv7s72qDjXBa032LgGmEz/3vPzpyqrSLFhRZ9Zl/Hvgv8IodkAM60iNTb0uIsuFDgCDhRrOs6Ho+i610TH33VLhdzwMemkwJr/sr6+IcS10KWxupYPqyGta4wk+Il9FNN0=
   file:
-    - nats_exporter_darwin_386
-    - nats_exporter_darwin_amd64
-    - nats_exporter_freebsd_386
-    - nats_exporter_freebsd_amd64
-    - nats_exporter_freebsd_arm
-    - nats_exporter_linux_386
-    - nats_exporter_linux_amd64
-    - nats_exporter_linux_arm
-    - nats_exporter_netbsd_386
-    - nats_exporter_netbsd_amd64
-    - nats_exporter_netbsd_arm
-    - nats_exporter_openbsd_386
-    - nats_exporter_openbsd_amd64
-    - nats_exporter_windows_386.exe
-    - nats_exporter_windows_amd64.exe
+    - build/nats_exporter_darwin_amd64
+    - build/nats_exporter_freebsd_386
+    - build/nats_exporter_freebsd_amd64
+    - build/nats_exporter_linux_386
+    - build/nats_exporter_linux_amd64
+    - build/nats_exporter_linux_arm
+    - build/nats_exporter_windows_386.exe
+    - build/nats_exporter_windows_amd64.exe
   on:
     tags: true
