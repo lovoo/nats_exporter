@@ -68,4 +68,5 @@ vet:
 .PHONY: release-build
 release-build:
 	@echo "$(OK_COLOR)[$(APP)] Create binaries $(NO_COLOR)"
+	@go get -u github.com/mitchellh/gox
 	@$(GOX) $(GOX_ARGS) github.com/lovoo/nats_exporter
